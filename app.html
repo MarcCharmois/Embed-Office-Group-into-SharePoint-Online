@@ -1,0 +1,135 @@
+<html>
+<head>
+<title>
+Embed Office Group
+</title>
+<body>
+<script type="text/javascript">
+function requestToken() { 
+  // Change clientId and replyUrl to reflect your app's values 
+  // found on the Configure tab in the Azure Management Portal. 
+  // Also change {your_subdomain} to your subdomain for both endpointUrl and resource. 
+  var clientId    = 'e77659cc-bf72-4276-bd33-bdd876660a74';//ID of your App in Azure
+  var replyUrl    = 'https://marccharmois.sharepoint.com/sites/intranet/app.html'; //my sharepoint page that requests an oauth 2 authentification and data
+  //It is also referenced in the REPLY URL field of my App in Azure
+  var endpointUrl = 'https://graph.microsoft.com/beta/marccharmois.onmicrosoft.com/groups';
+  //var endpointUrl = 'https://marccharmois-my.sharepoint.com/_api/v1.0/me/files';//getting files from SharePoint
+  //var endpointUrl = 'https://outlook.office.com/api/V1.0/me/messages';//getting messages  from outlook
+  var resource = "https://graph.microsoft.com/";
+  //var resource = "https://marccharmois-my.sharepoint.com"; //getting files from SharePoint
+  //var resource = "https://outlook.office.com"; //getting messages  from outlook
+  
+  var authServer  = 'https://login.windows.net/common/oauth2/authorize?';  
+  //var authServer  =  'https://login.microsoftonline.com/common/oauth2/authorize?';//this works either
+  var responseType = 'token'; 
+
+  var url = authServer + 
+            "response_type=" + encodeURI(responseType) + "&" + 
+            "client_id=" + encodeURI(clientId) + "&" + 
+            "resource=" + encodeURI(resource) + "&" + 
+            "redirect_uri=" + encodeURI(replyUrl); 
+
+  window.location = url; 
+}
+
+var urlParameterExtraction = new (function () { 
+  function splitQueryString(queryStringFormattedString) { 
+    var split = queryStringFormattedString.split('&'); 
+
+    // If there are no parameters in URL, do nothing.
+    if (split == "") {
+      return {};
+    } 
+
+    var results = {}; 
+
+    // If there are parameters in URL, extract key/value pairs. 
+    for (var i = 0; i < split.length; ++i) { 
+      var p = split[i].split('=', 2); 
+      if (p.length == 1) 
+        results[p[0]] = ""; 
+      else 
+        results[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " ")); 
+    } 
+
+    return results; 
+  } 
+
+  // Split the query string (after removing preceding '#'). 
+  this.queryStringParameters = splitQueryString(window.location.hash.substr(1)); 
+})(); 
+
+
+
+function displayToken(){
+// Extract token from urlParameterExtraction object.
+var token = urlParameterExtraction.queryStringParameters['access_token'];
+alert('token : \n'+ token);
+}
+
+function getToken(){
+
+var token = urlParameterExtraction.queryStringParameters['access_token'];
+return token;
+}
+
+function getGroupsFromO365() { 
+  try 
+  { 
+    //var endpointUrl = 'https://graph.microsoft.com/beta/marccharmois.onmicrosoft.com/groups'; //getting all groups to get the ID of the group you want
+	//var endpointUrl = 'https://marccharmois-my.sharepoint.com/_api/v1.0/me/files';//getting files from SharePoint
+	//var endpointUrl = 'https://outlook.office.com/api/V1.0/me/messages';//getting messages from SharePoint
+	var endpointUrl = "https://graph.microsoft.com/beta/contoso.com/groups('4eba7454-b490-46ae-bb5e-774efaec7c6f')/conversations('AAQkADZjOTdkMTIwLWFjNTItNDUyYy05MTc4LTg1NmJmMDk1MjYxOQAQAD_Ql6WI-GlHs3VmVZsV3QA=')/threads('AAQkADZjOTdkMTIwLWFjNTItNDUyYy05MTc4LTg1NmJmMDk1MjYxOQMkABAAP5CXpYj8aUezdWZVmxXdABAAP5CXpYj8aUezdWZVmxXdAA==')/Posts";
+
+    var xhr = new XMLHttpRequest(); 
+    xhr.open("GET", endpointUrl); 
+    var myToken = getToken();
+    // The APIs require an OAuth access token in the Authorization header, formatted like this: 'Authorization: Bearer <token>'. 
+    xhr.setRequestHeader("Authorization", "Bearer " + myToken); 
+
+    // Process the response from the API.  
+    xhr.onload = function () { 
+      if (xhr.status == 200) { 
+	    //alert('data received');
+		var message="";
+		
+		var object = JSON.parse(xhr.response); 
+		for(i=0;i<object.value.length;i++){
+		message+='From: ' + object.value[i].From.EmailAddress.Name + '<br>';
+		message+='At: ' + object.value[i].CreatedDateTime + '<br>';		
+		message+= object.value[i].Body.Content + '<br><br>';
+
+		
+		}
+        //var formattedResponse = JSON.stringify(JSON.parse(xhr.response), undefined, 2);
+        document.getElementById("results").innerHTML = message;
+      } else { 
+        document.getElementById("results").textContent = "HTTP " + xhr.status + "<br>" + xhr.response; 
+      } 
+    } 
+
+    // Make request.
+    xhr.send(); 
+  } 
+  catch (err) 
+  {  
+    document.getElementById("results").textContent = "Exception: " + err.message; 
+  } 
+}
+
+</script>
+<a href="javascript:requestToken();">get Token</a>
+<br>
+<br>
+<a href="javascript:displayToken();">display Token</a>
+<br>
+<br>
+<a href="javascript:getGroupsFromO365();">get Office Group Conversation</a>
+<br>
+<br>
+<div style ="width:250px;height:500px;text-align:justify;" id="results">
+
+
+</div>
+</body>
+</html>
