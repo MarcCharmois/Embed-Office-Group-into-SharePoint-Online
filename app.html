@@ -10,7 +10,8 @@ function requestToken() {
   // found on the Configure tab in the Azure Management Portal. 
   // Also change {your_subdomain} to your subdomain for both endpointUrl and resource. 
   var clientId    = 'e77659cc-bf72-4276-bd33-bdd876660a74';//ID of your App in Azure
-  var replyUrl    = 'https://marccharmois.sharepoint.com/sites/intranet/app.html'; //my sharepoint page that requests an oauth 2 authentification and data
+  var replyUrl    = 'https://marccharmois.sharepoint.com/sites/intranet/app.html'; //my sharepoint page that requests 
+  //an oauth 2 authentification and data
   //It is also referenced in the REPLY URL field of my App in Azure
   var endpointUrl = 'https://graph.microsoft.com/beta/marccharmois.onmicrosoft.com/groups';
   //var endpointUrl = 'https://marccharmois-my.sharepoint.com/_api/v1.0/me/files';//getting files from SharePoint
@@ -78,13 +79,14 @@ function getGroupsFromO365() {
   { 
     //var endpointUrl = 'https://graph.microsoft.com/beta/marccharmois.onmicrosoft.com/groups'; //getting all groups to get the ID of the group you want
 	//var endpointUrl = 'https://marccharmois-my.sharepoint.com/_api/v1.0/me/files';//getting files from SharePoint
-	//var endpointUrl = 'https://outlook.office.com/api/V1.0/me/messages';//getting messages from SharePoint
+	//var endpointUrl = 'https://outlook.office.com/api/V1.0/me/messages';//getting messages from Outlook
 	var endpointUrl = "https://graph.microsoft.com/beta/contoso.com/groups('4eba7454-b490-46ae-bb5e-774efaec7c6f')/conversations('AAQkADZjOTdkMTIwLWFjNTItNDUyYy05MTc4LTg1NmJmMDk1MjYxOQAQAD_Ql6WI-GlHs3VmVZsV3QA=')/threads('AAQkADZjOTdkMTIwLWFjNTItNDUyYy05MTc4LTg1NmJmMDk1MjYxOQMkABAAP5CXpYj8aUezdWZVmxXdABAAP5CXpYj8aUezdWZVmxXdAA==')/Posts";
 
     var xhr = new XMLHttpRequest(); 
     xhr.open("GET", endpointUrl); 
     var myToken = getToken();
-    // The APIs require an OAuth access token in the Authorization header, formatted like this: 'Authorization: Bearer <token>'. 
+    // The APIs require an OAuth access token in the Authorization header, formatted like this: 
+    //'Authorization: Bearer <token>'. 
     xhr.setRequestHeader("Authorization", "Bearer " + myToken); 
 
     // Process the response from the API.  
