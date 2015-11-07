@@ -92,14 +92,11 @@ function getGroupsFromO365() {
       if (xhr.status == 200) { 
 	    //alert('data received');
 		var message="";
-		
 		var object = JSON.parse(xhr.response); 
 		for(i=0;i<object.value.length;i++){
 		message+='From: ' + object.value[i].From.EmailAddress.Name + '<br>';
 		message+='At: ' + object.value[i].CreatedDateTime + '<br>';		
 		message+= object.value[i].Body.Content + '<br><br>';
-
-		
 		}
         //var formattedResponse = JSON.stringify(JSON.parse(xhr.response), undefined, 2);
         document.getElementById("results").innerHTML = message;
