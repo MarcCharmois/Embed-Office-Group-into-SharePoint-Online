@@ -81,7 +81,8 @@ function getGroupsFromO365() {
    //var endpointUrl = 'https://graph.microsoft.com/beta/marccharmois.onmicrosoft.com/groups';
    //var endpointUrl = 'https://marccharmois-my.sharepoint.com/_api/v1.0/me/files';//getting files from SharePoint
    //var endpointUrl = 'https://outlook.office.com/api/V1.0/me/messages';//getting messages from Outlook
-   //getting all the post of an Office Group Conversation:
+   //getting all the post of an Office Group Conversation. Use the web service to find group, conversation and thread IDs 
+   //then replace the ID's by yours:
    var endpointUrl = "https://graph.microsoft.com/beta/contoso.com/groups('4eba7454-b490-46ae-bb5e-774efaec7c6f')/conversations('AAQkADZjOTdkMTIwLWFjNTItNDUyYy05MTc4LTg1NmJmMDk1MjYxOQAQAD_Ql6WI-GlHs3VmVZsV3QA=')/threads('AAQkADZjOTdkMTIwLWFjNTItNDUyYy05MTc4LTg1NmJmMDk1MjYxOQMkABAAP5CXpYj8aUezdWZVmxXdABAAP5CXpYj8aUezdWZVmxXdAA==')/Posts";
 
     var xhr = new XMLHttpRequest(); 
